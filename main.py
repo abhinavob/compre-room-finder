@@ -1,6 +1,6 @@
 import pandas as pd
-from make_pkl import make_pkl
 import streamlit as st
+# from make_pkl import make_pkl
 
 # Run for the first time only to create the PKL file from the PDF
 # make_pkl()
