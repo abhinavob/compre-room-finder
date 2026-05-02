@@ -5,16 +5,6 @@ import streamlit as st
 # Run for the first time only to create the PKL file from the PDF
 # make_pkl()
 
-with open("ExamSeatingArrangement.pdf", "rb") as f:
-    st.download_button(
-        label="Download Seating Arrangement PDF",
-        data=f,
-        file_name="ExamSeatingArrangement.pdf",
-        mime="application/pdf"
-    )
-
-df = pd.read_pickle("seating_arrangement.pkl")
-
 def filter_by_location(rooms, location):
     if location == "FD-1":
         return [r for r in rooms if str(r).startswith("1")]
@@ -26,10 +16,20 @@ def filter_by_location(rooms, location):
         return [r for r in rooms if str(r).startswith("6")]
     return rooms
 
-df[["Date", "Time"]] = df["DATE & SESSION"].str.split(", ", expand=True)
+with open("ExamSeatingArrangement.pdf", "rb") as f:
+    st.download_button(
+        label="Download Seating Arrangement PDF",
+        data=f,
+        file_name="ExamSeatingArrangement.pdf",
+        mime="application/pdf"
+    )
 
+df = pd.read_pickle("seating_arrangement.pkl")
+
+st.set_page_config(page_title="Room Finder")
 st.title("Compre Room Finder")
 
+df[["Date", "Time"]] = df["DATE & SESSION"].str.split(", ", expand=True)
 date = st.selectbox("Select Date", sorted(df["Date"].dropna().unique()))
 time = st.selectbox("Select Time", sorted(df["Time"].dropna().unique()))
 
@@ -47,9 +47,9 @@ st.subheader("Free Rooms")
 if not unused_rooms:
     st.write("None")
 else:
-    cols = st.columns(4)
+    cols = st.columns(5)
     for i, room in enumerate(unused_rooms):
-        with cols[i % 4]:
+        with cols[i % 5]:
             st.markdown(
                 f"<div style='padding:10px; margin-bottom: 10px; border-radius:8px; background:#10b981; color:white; text-align:center;'>{room}</div>",
                 unsafe_allow_html=True
